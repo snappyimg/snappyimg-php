@@ -8,35 +8,48 @@ use PHPUnit\Framework\TestCase;
 use Snappyimg\InvalidCredentialsException;
 use Snappyimg\InvalidOptionException;
 use Snappyimg\Options;
+use Snappyimg\Singleton;
 use Snappyimg\Snappyimg;
 
 
 final class SnappyimgTest extends TestCase
 {
 
+    const ORIGIN_URL = 'https://www.snappyimg.com/demo.jpg';
+    const EXPECTED_URL = 'https://demo.snappyimg.com/dummyappid/Y56BcZfggoXkTY0k1lH9bN_xmIKEz8983Ze3ClI3wac/fill/300/300/sm/1/aHR0cHM6Ly93d3cuc25hcHB5aW1nLmNvbS9kZW1vLmpwZw.jpg';
+
+    const APP_ID = 'dummyappid';
+    const APP_SECRET = 'beefcafebeefcafe';
+
+    private function getOptions(): Options
+    {
+        return new Options(Options::RESIZE_FILL, 300, 300, Options::GRAVITY_SMART, TRUE, Options::FORMAT_JPG);
+    }
+
     public function testSignedUrlIsValid()
     {
-        $originUrl = 'https://www.snappyimg.com/demo.jpg';
+        $snappy = new Snappyimg(self::APP_ID, self::APP_SECRET, Snappyimg::STAGE_DEMO);
+        $url = $snappy->buildUrl($this->getOptions(), self::ORIGIN_URL);
+        $this->assertSame(self::EXPECTED_URL, $url);
+    }
 
-        $options = new Options(Options::RESIZE_FILL, 300, 300, Options::GRAVITY_SMART, TRUE, Options::FORMAT_JPG);
-
-        $snappy = new Snappyimg('dummyappid', 'beefcafebeefcafe', Snappyimg::STAGE_DEMO);
-        $url = $snappy->buildUrl($options, $originUrl);
-
-        $expected = 'https://demo.snappyimg.com/dummyappid/Y56BcZfggoXkTY0k1lH9bN_xmIKEz8983Ze3ClI3wac/fill/300/300/sm/1/aHR0cHM6Ly93d3cuc25hcHB5aW1nLmNvbS9kZW1vLmpwZw.jpg';
-        $this->assertSame($expected, $url);
+    public function testSingleton()
+    {
+        Singleton::setup(self::APP_ID, self::APP_SECRET, Snappyimg::STAGE_DEMO);
+        $url = Singleton::buildUrl($this->getOptions(), self::ORIGIN_URL);
+        $this->assertSame(self::EXPECTED_URL, $url);
     }
 
     public function testValidation()
     {
         $this->assertException(InvalidCredentialsException::class, function () {
-            new Snappyimg('', 'beefcafebeefcafe', Snappyimg::STAGE_DEMO);
+            new Snappyimg('', self::APP_SECRET, Snappyimg::STAGE_DEMO);
         });
         $this->assertException(InvalidCredentialsException::class, function () {
-            new Snappyimg('dummyappid', 'not our hex encoded value', Snappyimg::STAGE_DEMO);
+            new Snappyimg(self::APP_ID, 'not our hex encoded value', Snappyimg::STAGE_DEMO);
         });
         $this->assertException(InvalidCredentialsException::class, function () {
-            new Snappyimg('dummyappid', 'beefcafebeefcafe', 'dummy');
+            new Snappyimg(self::APP_ID, self::APP_SECRET, 'dummy');
         });
 
         $options = Options::fromDefaults(1, 1);
