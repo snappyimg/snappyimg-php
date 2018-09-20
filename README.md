@@ -1,4 +1,4 @@
-<img src="/.logo.png" width="300">
+<img src="./logo.png" width="300">
 
 [![Build Status](https://travis-ci.org/snappyimg/snappyimg-php.svg?branch=master)](https://travis-ci.org/snappyimg/snappyimg-php)
 
