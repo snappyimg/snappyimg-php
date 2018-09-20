@@ -8,4 +8,5 @@ before_script:
   - composer install
 
 script:
+  - ./vendor/bin/phpstan analyse src tests --level=7
   - ./vendor/bin/phpunit --bootstrap vendor/autoload.php tests/

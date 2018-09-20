@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Snappyimg;
 
@@ -24,7 +24,7 @@ final class Snappyimg
      */
     public function __construct($appToken, $appSecret, $stage)
     {
-        $this->appToken = (string) $appToken;
+        $this->appToken = $appToken;
         if ($this->appToken === '') {
             throw InvalidCredentialsException::appToken($appToken);
         }
@@ -44,7 +44,7 @@ final class Snappyimg
 
     /**
      * @param Options $options
-     * @param $originUrl
+     * @param string $originUrl
      * @return string URL
      * @throws SigningException
      */
@@ -61,7 +61,7 @@ final class Snappyimg
         );
 
         $hmac = hash_hmac('sha256', $path, $this->appSecretBin, TRUE);
-        if ($hmac === FALSE || $hmac === '') {
+        if ($hmac === '') {
             throw SigningException::create();
         }
 
@@ -76,6 +76,7 @@ final class Snappyimg
             throw InvalidCredentialsException::appToken($hexString);
         };
 
+        $previousHandler = NULL;
         try {
             $previousHandler = set_error_handler($handler);
             return pack("H*" , $hexString);

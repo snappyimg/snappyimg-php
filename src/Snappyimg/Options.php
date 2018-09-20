@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Snappyimg;
 
@@ -39,7 +39,7 @@ final class Options
      * @param int $width
      * @param int $height
      * @param string $gravity
-     * @param string $enlarge
+     * @param bool $enlarge
      * @param string $format
      * @throws InvalidOptionException
      */
@@ -130,11 +130,11 @@ final class Options
     }
 
     /**
-     * @param string $enlarge
+     * @param bool $enlarge
      */
     public function setEnlarge($enlarge): self
     {
-        $this->enlarge = (bool) $enlarge;
+        $this->enlarge = $enlarge;
         return $this;
     }
 
