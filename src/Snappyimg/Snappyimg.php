@@ -29,7 +29,7 @@ final class Snappyimg
             throw InvalidCredentialsException::appToken($appToken);
         }
 
-        $this->appSecretBin = pack("H*" , $appSecret);
+        $this->appSecretBin = self::packHex($appSecret);
         if ($this->appSecretBin === '') {
             throw InvalidCredentialsException::appSecret($appSecret);
         }
@@ -50,7 +50,7 @@ final class Snappyimg
      */
     public function buildUrl(Options $options, $originUrl): string
     {
-        $path = sprintf("%s/%d/%d/%s/%d/%s.%s",
+        $path = sprintf("/%s/%d/%d/%s/%d/%s.%s",
             $options->getResize(),
             $options->getWidth(),
             $options->getHeight(),
@@ -66,7 +66,25 @@ final class Snappyimg
         }
 
         $signature = self::base64($hmac);
-        return "https://{$this->stage}.snappyimg.com/{$this->appToken}/$signature/$path";
+        return "https://{$this->stage}.snappyimg.com/{$this->appToken}/$signature$path";
+    }
+
+
+    private static function packHex($hexString): string
+    {
+        $handler = function () use ($hexString) {
+            throw InvalidCredentialsException::appToken($hexString);
+        };
+
+        try {
+            $previousHandler = set_error_handler($handler);
+            return pack("H*" , $hexString);
+
+        } finally {
+            if ($previousHandler) {
+                set_error_handler($previousHandler);
+            }
+        }
     }
 
 

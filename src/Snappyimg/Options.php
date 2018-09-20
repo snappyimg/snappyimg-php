@@ -10,7 +10,7 @@ final class Options
     const RESIZE_FIT = 'fit';
     const RESIZE_CROP = 'crop';
 
-    const GRAVITY_SMART = 'smart';
+    const GRAVITY_SMART = 'sm';
     const GRAVITY_CENTER = 'ce';
     const GRAVITY_LEFT_EDGE = 'we';
     const GRAVITY_TOP_EDGE = 'no';
