@@ -1,0 +1,14 @@
+{
+    "name": "snappyimg/snappyimg-php",
+    "description": "Scale, crop and optimize images on-the-fly,",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "with all the benefits of a CDN.manGoweb",
+            "email": "info@mangoweb.cz"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
