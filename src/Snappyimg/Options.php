@@ -65,6 +65,11 @@ final class Options
 
 
     /**
+     * Allowed values are:
+     *   Snappyimg::RESIZE_FIT Keep aspect ratio and resize. Resulting image will be exact on $width or $height and smaller on the other. If given $width×$height is in same aspect ratio as the original image, both dimensions will be exact. In that case the behaviour is identical to fill.
+     *   Snappyimg::RESIZE_FILL Keep aspect ratio and fill to given dimensions, cropping overflow.
+     *   Snappyimg::RESIZE_CROP Crop to given $width×$height without resizing.
+     *
      * @param string $resize
      * @throws InvalidOptionException
      */
@@ -80,6 +85,8 @@ final class Options
     }
 
     /**
+     * Maximum dimensions in pixels the resulting image should have. Based on the combinations of $resize and $enlarge, the actual dimensions may be smaller.
+     *
      * @param int $width
      * @param int $height
      * @throws InvalidOptionException
@@ -100,6 +107,9 @@ final class Options
     }
 
     /**
+     * Tells snappyimg how to position an image in canvas when a part of the image (if any) should be cropped.
+     * Allowed values are: Snappyimg::GRAVITY_*
+     *
      * @param string $gravity
      * @throws InvalidOptionException
      */
@@ -115,6 +125,20 @@ final class Options
     }
 
     /**
+     * Whether original image should be scaled-up to given $width×$height if it is smaller.
+     *
+     * @param bool $enlarge
+     */
+    public function setEnlarge($enlarge): self
+    {
+        $this->enlarge = $enlarge;
+        return $this;
+    }
+
+    /**
+     * If the original image is in different format, it is converted. Transparency is supported.
+     * Allowed values are: Snappyimg::FORMAT_*
+     *
      * @param string $format
      * @throws InvalidOptionException
      */
@@ -126,15 +150,6 @@ final class Options
         }
         $this->format = $format;
 
-        return $this;
-    }
-
-    /**
-     * @param bool $enlarge
-     */
-    public function setEnlarge($enlarge): self
-    {
-        $this->enlarge = $enlarge;
         return $this;
     }
 
