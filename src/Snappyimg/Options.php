@@ -97,7 +97,7 @@ final class Options
             throw InvalidOptionException::width($width);
         }
         if ($height <= 0) {
-            throw InvalidOptionException::height($width);
+            throw InvalidOptionException::height($height);
         }
 
         $this->width = $width;
