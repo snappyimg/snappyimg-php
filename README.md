@@ -46,10 +46,10 @@ The `Options` class lets you specify exactly how the image should be processed.
 
 ```php
 $options = Options::fromDefaults(360, 420)
-    ->setResize(Snappyimg::RESIZE_FIT)
-    ->setGravity(Snappyimg::GRAVITY_SMART)
+    ->setResize(Options::RESIZE_FIT)
+    ->setGravity(Options::GRAVITY_SMART)
     ->setEnlarge(FALSE)
-    ->setFormat(Snappyimg::FORMAT_WEBP);
+    ->setFormat(Options::FORMAT_WEBP);
 ```
 
 The options themselves are explained at [Documentation](https://www.snappyimg.com/docs) and at each method. 
