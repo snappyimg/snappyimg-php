@@ -76,15 +76,12 @@ final class Snappyimg
             throw InvalidCredentialsException::appToken($hexString);
         };
 
-        $previousHandler = NULL;
         try {
-            $previousHandler = set_error_handler($handler);
+            set_error_handler($handler);
             return pack("H*" , $hexString);
 
         } finally {
-            if ($previousHandler) {
-                set_error_handler($previousHandler);
-            }
+            restore_error_handler();
         }
     }
 
